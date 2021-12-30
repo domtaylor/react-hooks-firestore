@@ -3,20 +3,20 @@ import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import AddTutorial from "./components/AddTutorial";
-import TutorialsList from "./components/TutorialsList";
+import AddUser from "./components/AddUser";
+import UsersList from "./components/UsersList";
 
 function App() {
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <a href="/tutorials" className="navbar-brand">
-          bezKoder
+        <a href="/users" className="navbar-brand">
+          Beywond Words
         </a>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"/tutorials"} className="nav-link">
-              Tutorials
+            <Link to={"/users"} className="nav-link">
+              Users
             </Link>
           </li>
           <li className="nav-item">
@@ -30,8 +30,8 @@ function App() {
       <div className="container mt-3">
         <h2>React Hooks Firestore example</h2>
         <Switch>
-          <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-          <Route exact path="/add" component={AddTutorial} />
+          <Route exact path={["/", "/users"]} component={UsersList} />
+          <Route exact path="/add" component={AddUser} />
         </Switch>
       </div>
     </div>

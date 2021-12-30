@@ -1,6 +1,6 @@
 import firebase from "../firebase";
 
-const db = firebase.collection("/tutorials");
+const db = firebase.database.ref('whitelabelgroups');
 
 const getAll = () => {
   return db;
@@ -18,11 +18,11 @@ const remove = (id) => {
   return db.doc(id).delete();
 };
 
-const TutorialService = {
+const UserDataService = {
   getAll,
   create,
   update,
   remove
 };
 
-export default TutorialService;
+export default UserDataService;

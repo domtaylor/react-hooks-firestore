@@ -1,55 +1,57 @@
 import React, { useState } from "react";
-import TutorialDataService from "../services/TutorialService";
+import UserDataService from "../services/UserService";
 
-const Tutorial = (props) => {
-  const initialTutorialState = {
+const User = (props) => {
+  const initialUserState = {
     key: null,
-    title: "",
-    description: "",
+    name: "",
+    password: "",
+    expiry: "",
     published: false,
   };
-  const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
+  const [currentUser, setCurrentUser] = useState(initialUserState);
   const [message, setMessage] = useState("");
 
-  const { tutorial } = props;
-  if (currentTutorial.id !== tutorial.id) {
-    setCurrentTutorial(tutorial);
+  const { user } = props;
+  if (currentUser.id !== user.id) {
+    setCurrentUser(user);
     setMessage("");
   }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setCurrentTutorial({ ...currentTutorial, [name]: value });
+    setCurrentUser({ ...currentUser, [name]: value });
   };
 
   const updatePublished = (status) => {
-    TutorialDataService.update(currentTutorial.id, { published: status })
+    UserDataService.update(currentUser.id, { published: status })
       .then(() => {
-        setCurrentTutorial({ ...currentTutorial, published: status });
-        setMessage("The status was updated successfully!");
+        setCurrentUser({ ...currentUser, published: status });
+        setMessage("The user was updated successfully!");
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  const updateTutorial = () => {
+  const updateUser = () => {
     const data = {
-      title: currentTutorial.title,
-      description: currentTutorial.description,
+      name: currentUser.name,
+      password: currentUser.password,
+      expiry: currentUser.expiry
     };
 
-    TutorialDataService.update(currentTutorial.id, data)
+    UserDataService.update(currentUser.id, data)
       .then(() => {
-        setMessage("The tutorial was updated successfully!");
+        setMessage("The user was updated successfully!");
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  const deleteTutorial = () => {
-    TutorialDataService.remove(currentTutorial.id)
+  const deleteUser = () => {
+    UserDataService.remove(currentUser.id)
       .then(() => {
         props.refreshList();
       })
@@ -60,29 +62,29 @@ const Tutorial = (props) => {
 
   return (
     <div>
-      {currentTutorial ? (
+      {currentUser ? (
         <div className="edit-form">
-          <h4>Tutorial</h4>
+          <h4>User</h4>
           <form>
             <div className="form-group">
               <label htmlFor="title">Title</label>
               <input
                 type="text"
                 className="form-control"
-                id="title"
-                name="title"
-                value={currentTutorial.title}
+                id="name"
+                name="name"
+                value={currentUser.name}
                 onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="password">Password</label>
               <input
                 type="text"
                 className="form-control"
-                id="description"
-                name="description"
-                value={currentTutorial.description}
+                id="password"
+                name="password"
+                value={currentUser.password}
                 onChange={handleInputChange}
               />
             </div>
@@ -91,11 +93,11 @@ const Tutorial = (props) => {
               <label>
                 <strong>Status:</strong>
               </label>
-              {currentTutorial.published ? "Published" : "Pending"}
+              {currentUser.published ? "Published" : "Pending"}
             </div>
           </form>
 
-          {currentTutorial.published ? (
+          {currentUser.published ? (
             <button
               className="badge badge-primary mr-2"
               onClick={() => updatePublished(false)}
@@ -111,14 +113,14 @@ const Tutorial = (props) => {
             </button>
           )}
 
-          <button className="badge badge-danger mr-2" onClick={deleteTutorial}>
+          <button className="badge badge-danger mr-2" onClick={deleteUser}>
             Delete
           </button>
 
           <button
             type="submit"
             className="badge badge-success"
-            onClick={updateTutorial}
+            onClick={updateUser}
           >
             Update
           </button>
@@ -127,11 +129,11 @@ const Tutorial = (props) => {
       ) : (
         <div>
           <br />
-          <p>Please click on a Tutorial...</p>
+          <p>Please click on a User...</p>
         </div>
       )}
     </div>
   );
 };
 
-export default Tutorial;
+export default User;

@@ -1,15 +1,15 @@
 import React, { useState /*, useEffect */ } from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
-import TutorialDataService from "../services/TutorialService";
-import Tutorial from "./Tutorial";
+import { useList } from "react-firebase-hooks/database";
+import UserDataService from "../services/UserService";
+import User from "./User";
 
-const TutorialsList = () => {
+const UsersList = () => {
   // const [tutorials, setTutorials] = useState([]);
-  const [currentTutorial, setCurrentTutorial] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
 
   /* use react-firebase-hooks */
-  const [tutorials, loading, error] = useCollection(TutorialDataService.getAll().orderBy("title", "asc"));
+  const [users, loading, error] = useList(UserDataService.getAll().orderBy("name", "asc"));
 
   /* manually listen for value events 
   const onDataChange = (items) => {
@@ -37,17 +37,18 @@ const TutorialsList = () => {
   */
 
   const refreshList = () => {
-    setCurrentTutorial(null);
+    setCurrentUser(null);
     setCurrentIndex(-1);
   };
 
-  const setActiveTutorial = (tutorial, index) => {
-    const { title, description, published } = tutorial.data();
+  const setActiveUser = (user, index) => {
+    const { name, password, expiry, published } = user.data();
 
-    setCurrentTutorial({
-      id: tutorial.id,
-      title,
-      description,
+    setCurrentUser({
+      id: user.id,
+      name,
+      password,
+      expiry,
       published,
     });
 
@@ -57,31 +58,31 @@ const TutorialsList = () => {
   return (
     <div className="list row">
       <div className="col-md-6">
-        <h4>Tutorials List</h4>
+        <h4>User List</h4>
         {error && <strong>Error: {error}</strong>}
         {loading && <span>Loading...</span>}
         <ul className="list-group">
           { !loading &&
-            tutorials &&
-            tutorials.docs.map((tutorial, index) => ( /* tutorials.map */
+            users &&
+             users.docs.map((user, index) => ( /* tutorials.map */
               <li
                 className={"list-group-item " + (index === currentIndex ? "active" : "")}
-                onClick={() => setActiveTutorial(tutorial, index)}
-                key={tutorial.id}
+                onClick={() => setActiveUser(user, index)}
+                key={user.id}
               >
-                { tutorial.data().title }
+                { user.data().name }
                 { /*tutorial.title*/ }
               </li>
             ))}
         </ul>
       </div>
       <div className="col-md-6">
-        {currentTutorial ? (
-          <Tutorial tutorial={currentTutorial} refreshList={refreshList} />
+        {currentUser ? (
+          <User user={currentUser} refreshList={refreshList} />
         ) : (
           <div>
             <br />
-            <p>Please click on a Tutorial...</p>
+            <p>Please click on a User...</p>
           </div>
         )}
       </div>
@@ -89,4 +90,4 @@ const TutorialsList = () => {
   );
 };
 
-export default TutorialsList;
+export default UsersList;

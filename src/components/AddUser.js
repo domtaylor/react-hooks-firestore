@@ -1,28 +1,30 @@
 import React, { useState } from "react";
-import TutorialDataService from "../services/TutorialService";
+import UserDataService from "../services/UserService";
 
-const AddTutorial = () => {
-  const initialTutorialState = {
-    title: "",
-    description: "",
+const AddUser = () => {
+  const initialUserState = {
+    name: "",
+    password: "",
+    expiry: "",
     published: false
   };
-  const [tutorial, setTutorial] = useState(initialTutorialState);
+  const [user, setUser] = useState(initialUserState);
   const [submitted, setSubmitted] = useState(false);
 
   const handleInputChange = event => {
     const { name, value } = event.target;
-    setTutorial({ ...tutorial, [name]: value });
+    setUser({ ...user, [name]: value });
   };
 
-  const saveTutorial = () => {
+  const saveUser = () => {
     var data = {
-      title: tutorial.title,
-      description: tutorial.description,
+      name: user.name,
+      password: user.description,
+      expiry: user.expiry,
       published: false
     };
 
-    TutorialDataService.create(data)
+    UserDataService.create(data)
       .then(() => {
         setSubmitted(true);
       })
@@ -31,8 +33,8 @@ const AddTutorial = () => {
       });
   };
 
-  const newTutorial = () => {
-    setTutorial(initialTutorialState);
+  const newUser = () => {
+    setUser(initialUserState);
     setSubmitted(false);
   };
 
@@ -41,39 +43,39 @@ const AddTutorial = () => {
       {submitted ? (
         <div>
           <h4>You submitted successfully!</h4>
-          <button className="btn btn-success" onClick={newTutorial}>
+          <button className="btn btn-success" onClick={newUser}>
             Add
           </button>
         </div>
       ) : (
         <div>
           <div className="form-group">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="name">Name</label>
             <input
               type="text"
               className="form-control"
               id="title"
               required
-              value={tutorial.title}
+              value={user.name}
               onChange={handleInputChange}
               name="title"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">Password</label>
             <input
               type="text"
               className="form-control"
-              id="description"
+              id="password"
               required
-              value={tutorial.description}
+              value={user.password}
               onChange={handleInputChange}
-              name="description"
+              name="password"
             />
           </div>
 
-          <button onClick={saveTutorial} className="btn btn-success">
+          <button onClick={saveUser} className="btn btn-success">
             Submit
           </button>
         </div>
@@ -82,4 +84,4 @@ const AddTutorial = () => {
   );
 };
 
-export default AddTutorial;
+export default AddUser;
